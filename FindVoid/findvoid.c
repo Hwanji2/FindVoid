@@ -107,8 +107,11 @@ void print_timetable(struct Room* room) {
     }
 }
 
-
 void find_and_print_empty_rooms(int day, int time_slot) {
+    if (day < 0 || day >= DAYS || time_slot < 0 || time_slot >= TIME_SLOTS) {
+        printf("잘못된 입력입니다. 다시 시도해주세요.\n");
+        return;
+    }
     printf("\n현재 비어있는 강의실 - 해당일: %d, 시간 버튼: %d\n", day, time_slot);
     for (int i = 0; i < building_count; i++) {
         printf("건물: %s\n", buildings[i].building_name);
@@ -128,9 +131,15 @@ void make_reservation() {
     printf("강의실 번호를 입력해주세요: ");
     scanf("%s", room_id);
     printf("해당일 (0: 월, 1: 화, ..., 4: 금): ");
-    scanf("%d", &day);
+    if (scanf("%d", &day) != 1 || day < 0 || day >= DAYS) {
+        printf("잘못된 입력입니다. 다시 시도해주세요.\n");
+        return;
+    }
     printf("시간 버튼 (0: 9시-10시, ..., 8: 5시-6시): ");
-    scanf("%d", &time_slot);
+    if (scanf("%d", &time_slot) != 1 || time_slot < 0 || time_slot >= TIME_SLOTS) {
+        printf("잘못된 입력입니다. 다시 시도해주세요.\n");
+        return;
+    }
     printf("사용자 ID를 입력해주세요: ");
     scanf("%s", user_id);
     printf("사용 목적: ");
@@ -170,7 +179,11 @@ int main() {
         printf("3. 강의실 예약 신청\n");
         printf("4. 종료\n");
         printf("선택해주세요: ");
-        scanf("%d", &choice);
+        if (scanf("%d", &choice) != 1 || choice < 1 || choice > 4) {
+            printf("잘못된 입력입니다. 다시 시도해주세요.\n");
+            while (getchar() != '\n');  // 입력 버퍼 비우기
+            continue;
+        }
 
         if (choice == 1) {
             char building_name[50], room_id[10];
@@ -191,9 +204,17 @@ int main() {
         else if (choice == 2) {
             int day, time_slot;
             printf("해당일 (0: 월, 1: 화, ..., 4: 금): ");
-            scanf("%d", &day);
+            if (scanf("%d", &day) != 1 || day < 0 || day >= DAYS) {
+                printf("잘못된 입력입니다. 다시 시도해주세요.\n");
+                while (getchar() != '\n');  // 입력 버퍼 비우기
+                continue;
+            }
             printf("시간 버튼 (0: 9시-10시, ..., 8: 5시-6시): ");
-            scanf("%d", &time_slot);
+            if (scanf("%d", &time_slot) != 1 || time_slot < 0 || time_slot >= TIME_SLOTS) {
+                printf("잘못된 입력입니다. 다시 시도해주세요.\n");
+                while (getchar() != '\n');  // 입력 버퍼 비우기
+                continue;
+            }
             find_and_print_empty_rooms(day, time_slot);
         }
         else if (choice == 3) {
@@ -202,9 +223,6 @@ int main() {
         else if (choice == 4) {
             printf("이용해주셔서 감사합니다.\n");
             break;
-        }
-        else {
-            printf("잘못된 입력입니다. 다시 시도해주세요.\n");
         }
     }
     return 0;
