@@ -30,12 +30,18 @@ struct Building {
 struct Building buildings[MAX_BUILDINGS];
 int building_count = 0;
 
-void load_building_data() {
-    FILE* fp = fopen("buildings.txt", "r");
+void check_file_existence(const char* filename) {
+    FILE* fp = fopen(filename, "r");
     if (fp == NULL) {
-        printf("buildings.txt 파일을 로드할 수 없습니다.\n");
+        printf("파일을 찾을 수 없습니다. 프로그램을 종료합니다.\n");
         exit(1);
     }
+    fclose(fp);
+}
+
+void load_building_data() {
+    check_file_existence("buildings.txt");
+    FILE* fp = fopen("buildings.txt", "r");
     fscanf(fp, "%d", &building_count);
     for (int i = 0; i < building_count; i++) {
         fscanf(fp, "%s %d", buildings[i].building_name, &buildings[i].room_count);
@@ -47,12 +53,9 @@ void load_building_data() {
 }
 
 void load_reservations() {
+    check_file_existence("reservations.txt");
     FILE* fp = fopen("reservations.txt", "r");
-    if (fp == NULL) {
-        printf("reservations.txt 파일을 로드할 수 없습니다.\n");
-        return;
-    }
-    int building_index, room_index, day, time_slot;
+    int building_index = 0, room_index = 0, day = 0, time_slot = 0;
     while (fscanf(fp, "%d %d %d %d %s %s", &building_index, &room_index, &day, &time_slot, buildings[building_index].rooms[room_index].reservations[day][time_slot].user_id, buildings[building_index].rooms[room_index].reservations[day][time_slot].purpose) != EOF) {
         // Reservations are loaded directly into the data structure
     }
@@ -81,20 +84,29 @@ void save_reservations() {
 
 void print_timetable(struct Room* room) {
     printf("\n학습시간표 - 강의실: %s\n", room->room_id);
-    printf("\t월\t화\t수\t목\t금\n");
+    printf("          월        화        수        목        금\n");  // 요일 간격 추가
     for (int t = 0; t < TIME_SLOTS; t++) {
-        printf("%d-%d시\t", 9 + t, 10 + t);
+        printf("%-9s", t == 0 ? "9시-10시  " :        // 시간 열 고정 너비 추가
+            t == 1 ? "10시-11시 " :
+            t == 2 ? "11시-12시 " :
+            t == 3 ? "12시-13시 " :
+            t == 4 ? "13시-14시 " :
+            t == 5 ? "14시-15시 " :
+            t == 6 ? "15시-16시 " :
+            t == 7 ? "16시-17시 " :
+            "17시-18시 ");
         for (int d = 0; d < DAYS; d++) {
             if (strlen(room->reservations[d][t].user_id) > 0) {
-                printf("%s\t", room->reservations[d][t].purpose);
+                printf("%-10s", room->reservations[d][t].purpose);  // 너비 10칸 고정
             }
             else {
-                printf("비어있음\t");
+                printf("%-10s", "비어있음");  // 너비 10칸 고정
             }
         }
         printf("\n");
     }
 }
+
 
 void find_and_print_empty_rooms(int day, int time_slot) {
     printf("\n현재 비어있는 강의실 - 해당일: %d, 시간 버튼: %d\n", day, time_slot);
@@ -113,7 +125,7 @@ void make_reservation() {
     int day, time_slot;
     printf("건물 이름을 입력해주세요: ");
     scanf("%s", building_name);
-    printf("강의실 ID를 입력해주세요: ");
+    printf("강의실 번호를 입력해주세요: ");
     scanf("%s", room_id);
     printf("해당일 (0: 월, 1: 화, ..., 4: 금): ");
     scanf("%d", &day);
@@ -121,7 +133,7 @@ void make_reservation() {
     scanf("%d", &time_slot);
     printf("사용자 ID를 입력해주세요: ");
     scanf("%s", user_id);
-    printf("사용 대상: ");
+    printf("사용 목적: ");
     scanf("%s", purpose);
 
     for (int i = 0; i < building_count; i++) {
@@ -164,7 +176,7 @@ int main() {
             char building_name[50], room_id[10];
             printf("건물 이름을 입력해주세요: ");
             scanf("%s", building_name);
-            printf("강의실 ID를 입력해주세요: ");
+            printf("강의실 번호를 입력해주세요: ");
             scanf("%s", room_id);
             for (int i = 0; i < building_count; i++) {
                 if (strcmp(buildings[i].building_name, building_name) == 0) {
