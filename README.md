@@ -10,6 +10,9 @@ FindVoid는 사용자가 강의실 예약을 조회하고, 특정 시간대에 �
 [FindVoid_Prototype](https://hwanji2.github.io/FindVoid_JS_prototype/)
 
 
+![image](https://github.com/user-attachments/assets/e8ad293a-5d69-418a-8ca3-4d7dc42d2419)
+
+
 ## 주요 기능
 1. **강의실 시간표 보기**
    - 특정 건물과 강의실을 선택하여 요일별/시간대별 예약 상태를 확인합니다.
@@ -41,6 +44,7 @@ FindVoid는 사용자가 강의실 예약을 조회하고, 특정 시간대에 �
 - 각 줄은 다음 형식으로 저장됩니다:
 <building_index> <room_index> <day> <time_slot> <user_id> <purpose>
 
+![image](https://github.com/user-attachments/assets/5bef23c1-b4cf-4bb7-8a19-c02de38d1ae2)
 
 ## 사용 방법
 1. **프로그램 실행**
