@@ -1,5 +1,7 @@
 [![파인드보이드](https://img.youtube.com/vi/pMRmSrVplwA/0.jpg)](https://youtu.be/pMRmSrVplwA)
 
+[FindVoid_Prototype](https://hwanji2.github.io/FindVoid_JS_prototype/)
+
 # FindVoid 강의실 예약 시스템
 
 ## 중요
@@ -7,7 +9,6 @@ FindVoid는 사용자가 강의실 예약을 조회하고, 특정 시간대에 �
 [파인드 보이드.pptx](https://github.com/user-attachments/files/18395362/default.pptx)
 
 
-[FindVoid_Prototype](https://hwanji2.github.io/FindVoid_JS_prototype/)
 
 
 ![image](https://github.com/user-attachments/assets/e8ad293a-5d69-418a-8ca3-4d7dc42d2419)
