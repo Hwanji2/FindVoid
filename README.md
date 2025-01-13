@@ -2,6 +2,8 @@
 
 [FindVoid_Prototype](https://hwanji2.github.io/FindVoid_JS_prototype/)
 
+https://github.com/Hwanji2/FindVoid_JS_prototype
+
 # FindVoid 빈 강의실 대여 시스템
 
 ## 중요
