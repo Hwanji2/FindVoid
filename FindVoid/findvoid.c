@@ -112,16 +112,132 @@ void find_and_print_empty_rooms(int day, int time_slot) {
         printf("잘못된 입력입니다. 다시 시도해주세요.\n");
         return;
     }
+
     printf("\n현재 비어있는 강의실 - 해당일: %d, 시간 버튼: %d\n", day, time_slot);
+
     for (int i = 0; i < building_count; i++) {
         printf("건물: %s\n", buildings[i].building_name);
-        for (int j = 0; j < buildings[i].room_count; j++) {
-            if (strlen(buildings[i].rooms[j].reservations[day][time_slot].user_id) == 0) {
-                printf("강의실: %s\n", buildings[i].rooms[j].room_id);
+
+        // 강의실 정렬
+        qsort(buildings[i].rooms, buildings[i].room_count, sizeof(struct Room), compare_rooms);
+
+        // 이진 탐색으로 빈 강의실 찾기
+        int low = 0, high = buildings[i].room_count - 1;
+        int mid = -1, found = 0;
+
+        while (low <= high) {
+            mid = (low + high) / 2;
+            if (strlen(buildings[i].rooms[mid].reservations[day][time_slot].user_id) == 0) {
+                found = 1;
+                break;
             }
+            if (strlen(buildings[i].rooms[mid].reservations[day][time_slot].user_id) > 0) {
+                high = mid - 1;
+            }
+            else {
+                low = mid + 1;
+            }
+        }
+
+        // 빈 강의실이 없을 경우
+        if (!found) {
+            printf("비어 있는 강의실이 없습니다.\n");
+            continue;
+        }
+
+        // 왼쪽으로 확장하여 빈 강의실 출력
+        int left = mid;
+        while (left >= 0 && strlen(buildings[i].rooms[left].reservations[day][time_slot].user_id) == 0) {
+            printf("강의실: %s\n", buildings[i].rooms[left].room_id);
+            left--;
+        }
+
+        // 오른쪽으로 확장하여 빈 강의실 출력
+        int right = mid + 1;
+        while (right < buildings[i].room_count && strlen(buildings[i].rooms[right].reservations[day][time_slot].user_id) == 0) {
+            printf("강의실: %s\n", buildings[i].rooms[right].room_id);
+            right++;
         }
     }
 }
+
+
+// 함수 정의
+int compare_rooms(const void* a, const void* b) {
+    return strcmp(((struct Room*)a)->room_id, ((struct Room*)b)->room_id);
+}
+void find_and_print_empty_rooms(int day, int time_slot) {
+    if (day < 0 || day >= DAYS || time_slot < 0 || time_slot >= TIME_SLOTS) {
+        printf("잘못된 입력입니다. 다시 시도해주세요.\n");
+        return;
+    }
+
+    printf("\n현재 비어있는 강의실 - 해당일: %d, 시간 버튼: %d\n", day, time_slot);
+
+    for (int i = 0; i < building_count; i++) {
+        printf("건물: %s\n", buildings[i].building_name);
+
+        // 강의실 정렬
+        qsort(buildings[i].rooms, buildings[i].room_count, sizeof(struct Room), compare_rooms);
+
+        // 이진 탐색으로 빈 강의실의 시작점 찾기
+        int low = 0, high = buildings[i].room_count - 1;
+        int mid = -1, found = 0;
+
+        while (low <= high) {
+            mid = (low + high) / 2;
+            if (strlen(buildings[i].rooms[mid].reservations[day][time_slot].user_id) == 0) {
+                found = 1;
+                break;
+            }
+            if (strlen(buildings[i].rooms[mid].reservations[day][time_slot].user_id) > 0) {
+                high = mid - 1;
+            }
+            else {
+                low = mid + 1;
+            }
+        }
+
+        // 빈 강의실이 없을 경우
+        if (!found) {
+            printf("비어 있는 강의실이 없습니다.\n");
+            continue;
+        }
+
+        // 왼쪽으로 확장하여 빈 강의실 출력
+        int left = mid;
+        while (left >= 0 && strlen(buildings[i].rooms[left].reservations[day][time_slot].user_id) == 0) {
+            printf("강의실: %s\n", buildings[i].rooms[left].room_id);
+            left--;
+        }
+
+        // 오른쪽으로 확장하여 빈 강의실 출력
+        int right = mid + 1;
+        while (right < buildings[i].room_count && strlen(buildings[i].rooms[right].reservations[day][time_slot].user_id) == 0) {
+            printf("강의실: %s\n", buildings[i].rooms[right].room_id);
+            right++;
+        }
+    }
+}
+
+
+void compare_performance(int day, int time_slot) {
+    clock_t start, end;
+
+    // 순차 탐색 성능 측정
+    start = clock();
+    find_and_print_empty_rooms_sequential(day, time_slot);  // 순차 탐색 호출
+    end = clock();
+    printf("\n순차 탐색 시간: %lf초\n", (double)(end - start) / CLOCKS_PER_SEC);
+
+    // 이진 탐색 성능 측정
+    start = clock();
+    find_and_print_empty_rooms(day, time_slot);  // 기존 이진 탐색 호출
+    end = clock();
+    printf("이진 탐색 시간: %lf초\n", (double)(end - start) / CLOCKS_PER_SEC);
+}
+
+
 
 void make_reservation() {
     char building_name[50], room_id[10], user_id[10], purpose[50];
@@ -178,8 +294,9 @@ int main() {
         printf("2. 비어있는 강의실 검색\n");
         printf("3. 강의실 예약 신청\n");
         printf("4. 종료\n");
+        printf("5. 성능 비교\n");
         printf("선택해주세요: ");
-        if (scanf("%d", &choice) != 1 || choice < 1 || choice > 4) {
+        if (scanf("%d", &choice) != 1 || choice < 1 || choice > 5) {
             printf("잘못된 입력입니다. 다시 시도해주세요.\n");
             while (getchar() != '\n');  // 입력 버퍼 비우기
             continue;
@@ -224,6 +341,15 @@ int main() {
             printf("이용해주셔서 감사합니다.\n");
             break;
         }
+        else if (choice == 5) {
+            int day, time_slot;
+            printf("해당일 (0: 월, 1: 화, ..., 4: 금): ");
+            scanf("%d", &day);
+            printf("시간 버튼 (0: 9시-10시, ..., 8: 5시-6시): ");
+            scanf("%d", &time_slot);
+            compare_performance(day, time_slot);
+        }
+
     }
     return 0;
 }
