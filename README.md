@@ -6,16 +6,6 @@ https://github.com/Hwanji2/FindVoid_JS_prototype
 
 # FindVoid 빈 강의실 대여 시스템
 
-## 중요
-FindVoid는 사용자가 강의실 예약을 조회하고, 특정 시간대에 비어있는 강의실을 검색할 수 있는 강의실 예약 관리 프로그램입니다. 순차 탐색과 이진 탐색을 활용하여 빈 강의실을 효율적으로 찾을 수 있으며, 탐색 방식에 따른 성능 비교 기능도 제공합니다.
-[파인드 보이드.pptx](https://github.com/user-attachments/files/18395362/default.pptx)
-
-
-
-
-![image](https://github.com/user-attachments/assets/e8ad293a-5d69-418a-8ca3-4d7dc42d2419)
-
-
 ## 주요 기능
 1. **강의실 시간표 보기**
    - 특정 건물과 강의실을 선택하여 요일별/시간대별 예약 상태를 확인합니다.
@@ -25,9 +15,6 @@ FindVoid는 사용자가 강의실 예약을 조회하고, 특정 시간대에 �
    
 3. **강의실 예약 신청**
    - 원하는 요일과 시간대에 강의실을 예약할 수 있습니다.
-   
-4. **성능 비교**
-   - 동일한 조건에서 순차 탐색과 이진 탐색의 성능을 측정하고 비교할 수 있습니다.
   
 ![image](https://github.com/user-attachments/assets/224ee0bb-383c-4dd8-a79b-f5822fbcf9db)
 
@@ -44,8 +31,6 @@ FindVoid는 사용자가 강의실 예약을 조회하고, 특정 시간대에 �
 ## 파일 형식
 ### `reservations.txt`
 - 강의실 예약 정보를 저장하는 파일입니다.
-- 각 줄은 다음 형식으로 저장됩니다:
-<building_index> <room_index> <day> <time_slot> <user_id> <purpose>
 
 ![image](https://github.com/user-attachments/assets/5bef23c1-b4cf-4bb7-8a19-c02de38d1ae2)
 
@@ -73,6 +58,7 @@ FindVoid는 사용자가 강의실 예약을 조회하고, 특정 시간대에 �
 
 ## 빌드 및 실행
 1. C 컴파일러(예: GCC)를 사용하여 프로그램을 컴파일합니다:
+![image](https://github.com/user-attachments/assets/b3c67e31-4edc-4a61-b31a-eb147b7b42c4)
 
 ## 참고 사항
 - 예약 데이터는 `reservations.txt` 파일에 저장되며, 프로그램 실행 시 자동으로 로드됩니다.
